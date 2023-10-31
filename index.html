@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Table</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div id="unique-count">Loading...</div>
+<table id="data-table">
+    <thead>
+        <tr>
+            <th>Team Name</th>
+            <th>Name</th>
+            <th>email</th>
+            <th>mobile number</th>
+            <th>Team Member 2</th>
+            <th>Team Member 3</th>
+            <th>team member 1</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script>
+    async function fetchDataAndPopulateTable() {
+        try {
+            const response = await fetch('https://jugaadecell.onrender.com/api/all'); // Replace with your API endpoint
+            const data = await response.json();
+
+            const dataTable = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+
+            // Clear the existing table data
+            dataTable.innerHTML = '';
+
+            // Loop through the data and create table rows
+            let entryCount = 0;
+            data.data.forEach(item => {
+                const row = dataTable.insertRow();
+                row.innerHTML = `
+                    <td>${item.teamName}</td>
+                    <td>${item.teamLeaderName}</td>
+                    <td>${item.email}</td>
+                    <td>${item.phoneNumber}</td>
+                    <td>${item.teamMember1 || ''}</td>
+                    <td>${item.teamMember2 || ''}</td>
+                    <td>${item.teamMember3 || ''}</td>
+                `;
+                entryCount++;
+            });
+
+            const countDisplay = document.getElementById('unique-count');
+            countDisplay.textContent = `Number of Unique Data Entries: ${entryCount}`;
+        } catch (error) {
+            console.error('Error fetching and populating data:', error);
+        }
+    }
+
+    // Call the function to fetch and populate data when the page loads
+    fetchDataAndPopulateTable();
+</script>
+</body>
+</html>
